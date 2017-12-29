@@ -1,4 +1,3 @@
-
 //zoomkat 5-13-13
 //simple client test
 //for use with IDE 1.0
@@ -8,7 +7,8 @@
 #include <SPI.h>
 #include <Ethernet.h>
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //physical mac address
-char serverName[] = "web.comporium.net"; // zoomkat's test web page server
+char serverName[] = "www.arduino.php5.sk"; // zoomkat's test web page server
+IPAddress ip(192, 168, 2, 40);
 EthernetClient client;
 
 String readString, readString1;
@@ -47,8 +47,8 @@ void sendGET() //client function to send/receive GET request data.
 {
   if (client.connect(serverName, 80)) {  //starts client connection, checks for connection
     Serial.println("connected");
-    client.println("GET /~shb/arduino.txt HTTP/1.1"); //download text
-    client.println("Host: web.comporium.net");
+    client.println("GET /rosko/system/values/voda.txt HTTP/1.1"); //download text
+    client.println("Host: www.arduino.php5.sk");
     client.println("Connection: close");  //close 1.1 persistent connection  
     client.println(); //end of get request
   } 
@@ -62,19 +62,18 @@ void sendGET() //client function to send/receive GET request data.
     char c = client.read(); //gets byte from ethernet buffer
     Serial.print(c); //prints raw feed for testing
     if (c==lf) x=(x+1); //counting line feeds
-    if (x==9) readString += c; //building readString
+    if (x==12) readString += c; //building readString
    }
-
+readString1 = (readString.substring(0,4)); //extracting "woohoo!"
   Serial.println();  
   Serial.println();
   Serial.print("Current data row:" );
-  Serial.print(readString); //the 10th line captured
-  Serial.println();
-  readString1 = (readString.substring(0,8)); //extracting "woohoo!"
-  Serial.println();
+  Serial.println(readString); //the 10th line captured
+Serial.println("Premenna je: ");
+Serial.println(readString); 
   Serial.print("How we feeling?: ");
-  Serial.println(readString1);
-  Serial.println();      
+ readString1 = (readString.substring(0,4)); //extracting "woohoo!"
+  Serial.println(readString1);    
   Serial.println("done");
   Serial.println("disconnecting.");
   Serial.println("==================");
