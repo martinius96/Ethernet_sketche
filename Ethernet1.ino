@@ -1,23 +1,18 @@
-//zoomkat 5-13-13
-//simple client test
-//for use with IDE 1.0
-//open serial monitor and send an e to test
-//for use with W5100 based ethernet shields
-
 #include <SPI.h>
 #include <Ethernet.h>
+int led = 6;
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //physical mac address
 char serverName[] = "www.arduino.php5.sk"; // zoomkat's test web page server
 IPAddress ip(192, 168, 2, 40);
 EthernetClient client;
-
-String readString, readString1;
+boolean state = false;
+String readString;
 int x=0; //for counting line feeds
 char lf=10; //line feed character
 //////////////////////
 
 void setup(){
-
+pinMode(led, OUTPUT);
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
     // no point in carrying on, so do nothing forevermore:
@@ -62,23 +57,23 @@ void sendGET() //client function to send/receive GET request data.
     char c = client.read(); //gets byte from ethernet buffer
     Serial.print(c); //prints raw feed for testing
     if (c==lf) x=(x+1); //counting line feeds
-    if (x==12) readString += c; //building readString
-   }
-readString1 = (readString.substring(0,4)); //extracting "woohoo!"
-  Serial.println();  
+    else if (x==12) readString += c; //building readString
+
+   } 
   Serial.println();
   Serial.print("Current data row:" );
   Serial.println(readString); //the 10th line captured
-Serial.println("Premenna je: ");
-Serial.println(readString); 
-  Serial.print("How we feeling?: ");
- readString1 = (readString.substring(0,4)); //extracting "woohoo!"
-  Serial.println(readString1);    
+if(readString=="VYP"){
+  digitalWrite(led, !state); 
+  state = !state;
+  Serial.println("Podmienka readString");
+  }
+  
   Serial.println("done");
   Serial.println("disconnecting.");
   Serial.println("==================");
   Serial.println();
   readString = ("");
-  readString1 = ("");  
+  x=0;
   client.stop(); //stop client
 }
