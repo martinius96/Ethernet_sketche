@@ -56,23 +56,18 @@ void sendGET() //client function to send/receive GET request data.
   while (client.connected() || client.available()) { //connected or data available
     char c = client.read(); //gets byte from ethernet buffer
     Serial.print(c); //prints raw feed for testing
-    if (c==lf) x=(x+1); //counting line feeds
+    if (c==lf) x++; //counting line feeds
     else if (x==12) readString += c; //building readString
-
-   } 
-  Serial.println();
-  Serial.print("Current data row:" );
-  Serial.println(readString); //the 10th line captured
+ 
+   }
+   Serial.println(); 
 if(readString=="VYP"){
-  digitalWrite(led, !state); 
-  state = !state;
-  Serial.println("Podmienka readString");
+  Serial.println("Vypnutie spotrebica");
+  }else if(readString=="ZAP"){
+  Serial.println("Zapnutie spotrebica");
+  }else{
+  Serial.println("Nespravna response");
   }
-  
-  Serial.println("done");
-  Serial.println("disconnecting.");
-  Serial.println("==================");
-  Serial.println();
   readString = ("");
   x=0;
   client.stop(); //stop client
