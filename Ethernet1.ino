@@ -42,7 +42,7 @@ void sendGET() //client function to send/receive GET request data.
 {
   if (client.connect(serverName, 80)) {  //starts client connection, checks for connection
     Serial.println("connected");
-    client.println("GET /rosko/system/values/voda.txt HTTP/1.1"); //download text
+    client.println("GET /PHP_sk/preklady.txt HTTP/1.1"); //download text
     client.println("Host: www.arduino.php5.sk");
     client.println("Connection: close");  //close 1.1 persistent connection  
     client.println(); //end of get request
@@ -61,12 +61,12 @@ void sendGET() //client function to send/receive GET request data.
  
    }
    Serial.println(); 
-if(readString=="VYP"){
+if(readString=="Vypni"){
   Serial.println("Vypnutie spotrebica");
-  }else if(readString=="ZAP"){
+  }else if(readString=="Zapni"){
   Serial.println("Zapnutie spotrebica");
   }else{
-  Serial.println("Nespravna response");
+  Serial.println("Nespravna response - skontrolujte zadaný parameter");
   }
   readString = ("");
   x=0;
